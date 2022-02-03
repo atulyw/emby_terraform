@@ -66,6 +66,11 @@ module "emby_service_sg" {
   ]
 }
 
+resource "aws_eip" "this" {
+  instance = module.ec2_instance.id
+  vpc      = true
+}
+
 resource "tls_private_key" "example" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -77,5 +82,5 @@ resource "aws_key_pair" "generated_key" {
 }
 
 output "public_ip" {
-  value = module.ec2_instance.public_ip
+  value = aws_eip.this.public_ip
 }
